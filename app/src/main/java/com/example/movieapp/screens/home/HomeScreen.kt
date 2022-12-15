@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -21,8 +22,8 @@ import com.example.movieapp.widgets.MovieRow
 fun HomeScreen(navController: NavController) {
     Scaffold(
         topBar = {
-            TopAppBar(elevation = 5.dp, backgroundColor = Color.Magenta) {
-                Text(text = "Movies")
+            TopAppBar(elevation = 5.dp, backgroundColor = MaterialTheme.colors.background) {
+                Text(text = "Movies", color = MaterialTheme.colors.onBackground)
             }
         },
     ) {

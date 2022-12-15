@@ -1,5 +1,7 @@
 package com.example.movieapp.screens.details
 
+import android.widget.Space
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,8 +9,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -23,10 +31,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
+import com.example.movieapp.data.Movie
+import com.example.movieapp.data.getMovies
+import com.example.movieapp.widgets.MovieRow
 
 
 @Composable
-fun DetailsScreen(navController: NavController, movieData: String?) {
+fun DetailsScreen(navController: NavController, movieId: String?) {
+
+    val movie = getMovies().first { movie -> movie.id == movieId }
+
     Scaffold(topBar = {
         TopAppBar(
             backgroundColor = Color.LightGray,
@@ -39,7 +54,7 @@ fun DetailsScreen(navController: NavController, movieData: String?) {
                     navController.popBackStack()
                 })
             Spacer(modifier = Modifier.width(10.dp))
-            Text(text = movieData.toString())
+            Text(text = movie.title)
         }
     }) {
         Surface(
@@ -49,18 +64,36 @@ fun DetailsScreen(navController: NavController, movieData: String?) {
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
-                Text(text = movieData.toString(), style = MaterialTheme.typography.h5)
-                Spacer(modifier = Modifier.width(100.dp))
-                Button(onClick = { navController.popBackStack() }) {
-                    Text(text = "Go back")
-                }
+                MovieRow(movie = movie)
+                Spacer(modifier = Modifier.height(8.dp))
+                Divider()
+                HorizontalImagesList(movie)
             }
         }
         it.calculateBottomPadding()
     }
 
 
+}
+
+@Composable
+private fun HorizontalImagesList(movie: Movie) {
+    LazyRow {
+        items(movie.images) { image ->
+            Card(
+                modifier = Modifier
+                    .padding(12.dp)
+                    .size(240.dp),
+                elevation = 5.dp
+            ) {
+                Image(
+                    painter = rememberImagePainter(data = image),
+                    contentDescription = "Movie screen"
+                )
+            }
+        }
+    }
 }
 
